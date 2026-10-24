@@ -1,0 +1,15 @@
+m31
+m31-core
+m33
+m45
+m1
+m13
+m27
+m57
+ngc6888
+ngc2174
+ic405
+ngc6992
+rosette
+ngc7000
+double-cluster
