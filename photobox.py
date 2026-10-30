@@ -23,7 +23,7 @@ PHOTOS = [
     ("m45",     "m45",          "M45 Pleiades",                   ("fit",)),
     ("m1",      "m1",           "M1 Crab Nebula",                 ("crop", 0.52, 0.49, 0.40)),
     ("m13",     "m13",          "M13 Hercules Cluster",           ("crop", 0.50, 0.51, 0.45)),
-    ("m27",     "m27",          "M27 Dumbbell Nebula",            ("crop", 0.47, 0.49, 0.40)),
+    ("m27",     "m27",          "M27 Dumbbell Nebula",            ("crop", 0.52, 0.51, 0.40)),
     ("m57",     "m57",          "M57 Ring Nebula",                ("crop", 0.47, 0.69, 0.16)),
     ("ngc6888", "ngc6888",      "NGC 6888 Crescent Nebula",       ("crop", 0.48, 0.42, 0.85)),
     ("ngc2174", "ngc2174",      "NGC 2174 Monkey Head Nebula",    ("crop", 0.53, 0.51, 0.85)),
