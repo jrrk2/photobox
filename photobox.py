@@ -5,33 +5,36 @@ previews and index.html.
     python3 photobox.py            (needs Pillow; downloads to .cache/ once)
 
 Frames land in frames/NAME.raw.gz (40960 bytes unpacked, as `fbget` wants) and previews in previews/NAME.png.
-Images are the author's own, taken with a Celestron Origin: https://origin.kimmitt.uk/stacks
+Images are the author's own, taken with a Celestron Origin: https://jrrk2.github.io/OriginMonitor/
 """
 import gzip, html, os, struct, urllib.request
 from PIL import Image
 
 W, H = 160, 128
-SITE = "https://origin.kimmitt.uk/img/stack/%d.jpg"
+SITE = "https://jrrk2.github.io/OriginMonitor/gallery/%s.jpg"   # the restacked finals: every good frame of a target from every night
 GAMMA = 0.8          # the panel is dim and these frames are dark: lift the mid tones a little
 
-# (stack number, name, caption, mode)   mode = ("crop", cx, cy, h) centres a window h*image height high on (cx, cy)
+# (gallery image, name, caption, mode)   mode = ("crop", cx, cy, h) centres a window h*image height high on (cx, cy)
 #                                       (fractions of the image); "fit" scales the whole field down, black bars.
 PHOTOS = [
-    (23, "m31",          "M31 Andromeda Galaxy",           ("crop", 0.50, 0.50, 0.95)),
-    (8,  "m31-core",     "M31 core and M32 (close crop)",  ("crop", 0.50, 0.30, 0.55)),
-    (0,  "m33",          "M33 Triangulum Galaxy",          ("crop", 0.46, 0.55, 0.85)),
-    (9,  "m45",          "M45 Pleiades",                   ("fit",)),
-    (10, "m1",           "M1 Crab Nebula",                 ("crop", 0.50, 0.48, 0.40)),
-    (12, "m13",          "M13 Hercules Cluster",           ("crop", 0.52, 0.55, 0.50)),
-    (4,  "m27",          "M27 Dumbbell Nebula",            ("crop", 0.47, 0.50, 0.45)),
-    (7,  "m57",          "M57 Ring Nebula",                ("crop", 0.49, 0.72, 0.22)),
-    (3,  "ngc6888",      "NGC 6888 Crescent Nebula",       ("crop", 0.48, 0.48, 0.60)),
-    (17, "ngc2174",      "NGC 2174 Monkey Head Nebula",    ("crop", 0.52, 0.58, 0.85)),
-    (19, "ic405",        "IC 405 Flaming Star Nebula",     ("crop", 0.55, 0.45, 0.85)),
-    (21, "ngc6992",      "NGC 6992 Eastern Veil Nebula",   ("fit",)),
-    (2,  "rosette",      "Rosette Nebula",                 ("fit",)),
-    (1,  "ngc7000",      "NGC 7000 North America Nebula",  ("fit",)),
-    (11, "double-cluster", "NGC 869 / 884 Double Cluster", ("fit",)),
+    ("m31",     "m31",          "M31 Andromeda Galaxy",           ("crop", 0.51, 0.45, 0.95)),
+    ("m31",     "m31-core",     "M31 core and M32 (close crop)",  ("crop", 0.51, 0.47, 0.55)),
+    ("m33",     "m33",          "M33 Triangulum Galaxy",          ("crop", 0.57, 0.60, 0.65)),
+    ("m45",     "m45",          "M45 Pleiades",                   ("fit",)),
+    ("m1",      "m1",           "M1 Crab Nebula",                 ("crop", 0.52, 0.49, 0.40)),
+    ("m13",     "m13",          "M13 Hercules Cluster",           ("crop", 0.50, 0.51, 0.45)),
+    ("m27",     "m27",          "M27 Dumbbell Nebula",            ("crop", 0.47, 0.49, 0.40)),
+    ("m57",     "m57",          "M57 Ring Nebula",                ("crop", 0.47, 0.69, 0.16)),
+    ("ngc6888", "ngc6888",      "NGC 6888 Crescent Nebula",       ("crop", 0.48, 0.42, 0.85)),
+    ("ngc2174", "ngc2174",      "NGC 2174 Monkey Head Nebula",    ("crop", 0.53, 0.51, 0.85)),
+    ("ic405",   "ic405",        "IC 405 Flaming Star Nebula",     ("crop", 0.52, 0.42, 0.85)),
+    ("ngc6992", "ngc6992",      "NGC 6992 Eastern Veil Nebula",   ("fit",)),
+    ("ngc2237", "rosette",      "Rosette Nebula",                 ("fit",)),
+    ("ngc7000", "ngc7000",      "NGC 7000 North America Nebula",  ("fit",)),
+    ("ngc869",  "double-cluster", "NGC 869 / 884 Double Cluster", ("fit",)),
+    ("ngc6946", "ngc6946",      "NGC 6946 Fireworks Galaxy",      ("crop", 0.48, 0.53, 0.45)),
+    ("ngc7380", "ngc7380",      "NGC 7380 Wizard Nebula",         ("crop", 0.46, 0.42, 0.85)),
+    ("ic5070",  "ic5070",       "IC 5070 Pelican Nebula",         ("fit",)),
 ]
 
 def frame(im, mode):
@@ -60,7 +63,7 @@ def main():
         os.makedirs(os.path.join(here, d), exist_ok=True)
     rows = []
     for n, name, caption, mode in PHOTOS:
-        src = os.path.join(here, ".cache", "%d.jpg" % n)
+        src = os.path.join(here, ".cache", "%s.jpg" % n)
         if not os.path.exists(src):
             urllib.request.urlretrieve(SITE % n, src)
         out = frame(Image.open(src).convert("RGB"), mode)
@@ -87,7 +90,7 @@ figcaption{padding-top:4px;font-size:14px}a{color:#8cf}code{background:#222;padd
 <h1>Sonata photobox</h1>
 <p>Deep-sky photographs taken with a Celestron Origin, ready for the 160&times;128 LCD on the lowRISC Sonata board.
 On the board: <code>fbget https://jrrk2.github.io/photobox/frames/m31.raw.gz 10</code> (raw RGB565, gzip). Slideshow: <code>sh photobox.sh https://jrrk2.github.io/photobox 8</code>.
-Full-size originals: <a href="https://origin.kimmitt.uk/stacks">origin.kimmitt.uk/stacks</a>.</p>
+Full-size originals: <a href="https://jrrk2.github.io/OriginMonitor/">the OriginMonitor gallery</a>.</p>
 <main>
 %s
 </main>

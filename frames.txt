@@ -13,3 +13,6 @@ ngc6992
 rosette
 ngc7000
 double-cluster
+ngc6946
+ngc7380
+ic5070
